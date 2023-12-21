@@ -37,6 +37,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // bu bean olmasa da olur, userDetailsService bean varsa, otomatik olarak bu oluşur.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
