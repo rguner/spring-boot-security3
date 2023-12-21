@@ -40,13 +40,26 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(getUserDetailsService());
+        //authenticationProvider.setUserDetailsService(getUserDetailsService()); // bu da çalışır.
+        authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
 
+    @Bean
+    UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
+        UserDetails user = User
+                .withUsername("javainuse3")
+                .password(passwordEncoder().encode("javainuse3"))
+                .authorities("read")
+                .build();
+        userDetailsService.createUser(user);
+        return userDetailsService;
+    }
 
-    // bu sefer bean değil ( otomatik bulmasın, authenticationProvider üzerinden bulsun)
+    /*
+    böyle de olur, ben olması şart değil. authenticationProvider()'un görebileceği metod olması yeterli
     private UserDetailsService getUserDetailsService() {
         InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
         UserDetails user = User
@@ -57,6 +70,8 @@ public class SecurityConfig {
         userDetailsService.createUser(user);
         return userDetailsService;
     }
+
+     */
 
     @Bean
     public PasswordEncoder passwordEncoder() {
